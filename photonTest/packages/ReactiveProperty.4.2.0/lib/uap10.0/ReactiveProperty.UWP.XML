@@ -1,0 +1,96 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>ReactiveProperty.UWP</name>
+    </assembly>
+    <members>
+        <member name="F:Reactive.Bindings.Interactivity.Op.Eq">
+            <summary>
+            =
+            </summary>
+        </member>
+        <member name="F:Reactive.Bindings.Interactivity.Op.GtEq">
+            <summary>
+            &gt;=
+            </summary>
+        </member>
+        <member name="F:Reactive.Bindings.Interactivity.Op.Gt">
+            <summary>
+            &gt;
+            </summary>
+        </member>
+        <member name="F:Reactive.Bindings.Interactivity.Op.LtEq">
+            <summary>
+            &lt;=
+            </summary>
+        </member>
+        <member name="F:Reactive.Bindings.Interactivity.Op.Lt">
+            <summary>
+            &lt;
+            </summary>
+        </member>
+        <member name="P:Reactive.Bindings.Interactivity.TriggerBase.ActionsImpl">
+            <summary>
+            Actionsプロパティは、TriggerBehaviorのベースクラスにいる状態だと認識しないっぽいので
+            泣く泣くこれを継承したクラスで以下のようなコードを書くことで対応することに…。
+            <code>
+            public ActionCollection Actions { get { return tshi.ActionImpl; } }
+            </code>
+            </summary>
+        </member>
+        <member name="T:Reactive.Bindings.Interactivity.EventToReactiveCommand">
+            <summary>
+            Converts EventArgs to object
+            </summary>
+        </member>
+        <member name="P:Reactive.Bindings.Interactivity.EventToReactiveCommand.IgnoreEventArgs">
+            <summary>
+            Ignore EventArgs. If value is false then uses Unit.Default.
+            </summary>
+        </member>
+        <member name="P:Reactive.Bindings.Interactivity.EventToReactiveCommand.Converters">
+            <summary>
+            set and get Value converter.
+            </summary>
+        </member>
+        <member name="T:Reactive.Bindings.Interactivity.EventToReactiveProperty">
+            <summary>
+            Converts EventArgs to object
+            </summary>
+        </member>
+        <member name="P:Reactive.Bindings.Interactivity.EventToReactiveProperty.IgnoreEventArgs">
+            <summary>
+            Ignore EventArgs. If value is false then uses Unit.Default.
+            </summary>
+        </member>
+        <member name="P:Reactive.Bindings.Interactivity.EventToReactiveProperty.Converters">
+            <summary>
+            set and get Value converter.
+            </summary>
+        </member>
+        <member name="T:Reactive.Bindings.Extensions.DependencyObjectExtensions">
+            <summary>
+            DependencyObject extension methods.
+            </summary>
+        </member>
+        <member name="M:Reactive.Bindings.Extensions.DependencyObjectExtensions.ObserveDependencyProperty``1(``0,Windows.UI.Xaml.DependencyProperty)">
+            <summary>
+            Observe DependencyProperty
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="self"></param>
+            <param name="dp"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Reactive.Bindings.Extensions.DependencyObjectExtensions.ToReadOnlyReactiveProperty``1(Windows.UI.Xaml.DependencyObject,Windows.UI.Xaml.DependencyProperty,Reactive.Bindings.ReactivePropertyMode,System.Reactive.Concurrency.IScheduler)">
+            <summary>
+            Create ReadOnlyReactiveProperty from DependencyObject
+            </summary>
+        </member>
+        <member name="M:Reactive.Bindings.Extensions.DependencyObjectExtensions.ToReactiveProperty``1(Windows.UI.Xaml.DependencyObject,Windows.UI.Xaml.DependencyProperty,System.Reactive.Concurrency.IScheduler,Reactive.Bindings.ReactivePropertyMode)">
+            <summary>
+            Create ReactiveProperty from DependencyObject
+            </summary>
+        </member>
+    </members>
+</doc>

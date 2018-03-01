@@ -1,0 +1,867 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>PhotonChatApi</name>
+    </assembly>
+    <members>
+        <member name="T:ExitGames.Client.Photon.Chat.ChatState">
+            <summary>Possible states for a LoadBalancingClient.</summary>
+        </member>
+        <member name="F:ExitGames.Client.Photon.Chat.ChatState.Uninitialized">
+            <summary>Peer is created but not used yet.</summary>
+        </member>
+        <member name="F:ExitGames.Client.Photon.Chat.ChatState.ConnectingToNameServer">
+            <summary>Connecting to master (includes connect, authenticate and joining the lobby)</summary>
+        </member>
+        <member name="F:ExitGames.Client.Photon.Chat.ChatState.ConnectedToNameServer">
+            <summary>Connected to master server.</summary>
+        </member>
+        <member name="F:ExitGames.Client.Photon.Chat.ChatState.Authenticating">
+            <summary>Usually when Authenticated, the client will join a game or the lobby (if AutoJoinLobby is true).</summary>
+        </member>
+        <member name="F:ExitGames.Client.Photon.Chat.ChatState.Authenticated">
+            <summary>Usually when Authenticated, the client will join a game or the lobby (if AutoJoinLobby is true).</summary>
+        </member>
+        <member name="F:ExitGames.Client.Photon.Chat.ChatState.DisconnectingFromNameServer">
+            <summary>Transition from master to game server.</summary>
+        </member>
+        <member name="F:ExitGames.Client.Photon.Chat.ChatState.ConnectingToFrontEnd">
+            <summary>Transition to gameserver (client will authenticate and join/create game).</summary>
+        </member>
+        <member name="F:ExitGames.Client.Photon.Chat.ChatState.ConnectedToFrontEnd">
+            <summary>Connected to gameserver (going to auth and join game).</summary>
+        </member>
+        <member name="F:ExitGames.Client.Photon.Chat.ChatState.DisconnectingFromFrontEnd">
+            <summary>Transition from gameserver to master (after leaving a room/game).</summary>
+        </member>
+        <member name="F:ExitGames.Client.Photon.Chat.ChatState.QueuedComingFromFrontEnd">
+            <summary>Currently not used.</summary>
+        </member>
+        <member name="F:ExitGames.Client.Photon.Chat.ChatState.Disconnecting">
+            <summary>The client disconnects (from any server).</summary>
+        </member>
+        <member name="F:ExitGames.Client.Photon.Chat.ChatState.Disconnected">
+            <summary>The client is no longer connected (to any server). Connect to master to go on.</summary>
+        </member>
+        <member name="T:ExitGames.Client.Photon.Chat.ChatEventCode">
+            <summary>
+            Wraps up internally used constants in Photon Chat events. You don't have to use them directly usually.
+            </summary>
+        </member>
+        <member name="T:ExitGames.Client.Photon.Chat.ChatOperationCode">
+            <summary>
+            Wraps up codes for operations used internally in Photon Chat. You don't have to use them directly usually.
+            </summary>
+        </member>
+        <member name="F:ExitGames.Client.Photon.Chat.ChatOperationCode.Authenticate">
+            <summary>(230) Operation Authenticate.</summary>
+        </member>
+        <member name="F:ExitGames.Client.Photon.Chat.ChatOperationCode.Subscribe">
+            <summary>(0) Operation to subscribe to chat channels.</summary>
+        </member>
+        <member name="F:ExitGames.Client.Photon.Chat.ChatOperationCode.Unsubscribe">
+            <summary>(1) Operation to unsubscribe from chat channels.</summary>
+        </member>
+        <member name="F:ExitGames.Client.Photon.Chat.ChatOperationCode.Publish">
+            <summary>(2) Operation to publish a message in a chat channel.</summary>
+        </member>
+        <member name="F:ExitGames.Client.Photon.Chat.ChatOperationCode.SendPrivate">
+            <summary>(3) Operation to send a private message to some other user.</summary>
+        </member>
+        <member name="F:ExitGames.Client.Photon.Chat.ChatOperationCode.ChannelHistory">
+            <summary>(4) Not used yet.</summary>
+        </member>
+        <member name="F:ExitGames.Client.Photon.Chat.ChatOperationCode.UpdateStatus">
+            <summary>(5) Set your (client's) status.</summary>
+        </member>
+        <member name="F:ExitGames.Client.Photon.Chat.ChatOperationCode.AddFriends">
+            <summary>(6) Add friends the list of friends that should update you of their status.</summary>
+        </member>
+        <member name="F:ExitGames.Client.Photon.Chat.ChatOperationCode.RemoveFriends">
+            <summary>(7) Remove friends from list of friends that should update you of their status.</summary>
+        </member>
+        <member name="T:ExitGames.Client.Photon.Chat.ChatParameterCode">
+            <summary>
+            Wraps up codes for parameters (in operations and events) used internally in Photon Chat. You don't have to use them directly usually.
+            </summary>
+        </member>
+        <member name="F:ExitGames.Client.Photon.Chat.ChatParameterCode.Channels">
+            <summary>(0) Array of chat channels.</summary>
+        </member>
+        <member name="F:ExitGames.Client.Photon.Chat.ChatParameterCode.Channel">
+            <summary>(1) Name of a single chat channel.</summary>
+        </member>
+        <member name="F:ExitGames.Client.Photon.Chat.ChatParameterCode.Messages">
+            <summary>(2) Array of chat messages.</summary>
+        </member>
+        <member name="F:ExitGames.Client.Photon.Chat.ChatParameterCode.Message">
+            <summary>(3) A single chat message.</summary>
+        </member>
+        <member name="F:ExitGames.Client.Photon.Chat.ChatParameterCode.Senders">
+            <summary>(4) Array of names of the users who sent the array of chat mesages.</summary>
+        </member>
+        <member name="F:ExitGames.Client.Photon.Chat.ChatParameterCode.Sender">
+            <summary>(5) Name of a the user who sent a chat message.</summary>
+        </member>
+        <member name="F:ExitGames.Client.Photon.Chat.ChatParameterCode.ChannelUserCount">
+            <summary>(6) Not used.</summary>
+        </member>
+        <member name="F:ExitGames.Client.Photon.Chat.ChatParameterCode.UserId">
+            <summary>(225) Name of user to send a (private) message to.</summary><remarks>The code is used in LoadBalancing and copied over here.</remarks>
+        </member>
+        <member name="F:ExitGames.Client.Photon.Chat.ChatParameterCode.MsgId">
+            <summary>(8) Id of a message.</summary>
+        </member>
+        <member name="F:ExitGames.Client.Photon.Chat.ChatParameterCode.MsgIds">
+            <summary>(9) Not used.</summary>
+        </member>
+        <member name="F:ExitGames.Client.Photon.Chat.ChatParameterCode.Secret">
+            <summary>(221) Secret token to identify an authorized user.</summary><remarks>The code is used in LoadBalancing and copied over here.</remarks>
+        </member>
+        <member name="F:ExitGames.Client.Photon.Chat.ChatParameterCode.SubscribeResults">
+            <summary>(15) Subscribe operation result parameter. A bool[] with result per channel.</summary>
+        </member>
+        <member name="F:ExitGames.Client.Photon.Chat.ChatParameterCode.Status">
+            <summary>(10) Status</summary>
+        </member>
+        <member name="F:ExitGames.Client.Photon.Chat.ChatParameterCode.Friends">
+            <summary>(11) Friends</summary>
+        </member>
+        <member name="F:ExitGames.Client.Photon.Chat.ChatParameterCode.SkipMessage">
+            <summary>(12) SkipMessage is used in SetOnlineStatus and if true, the message is not being broadcast.</summary>
+        </member>
+        <member name="F:ExitGames.Client.Photon.Chat.ChatParameterCode.HistoryLength">
+            <summary>(14) Number of message to fetch from history. 0: no history. 1 and higher: number of messages in history. -1: all history.</summary>
+        </member>
+        <member name="F:ExitGames.Client.Photon.Chat.ChatParameterCode.WebFlags">
+            <summary>(21) WebFlags object for changing behaviour of webhooks from client.</summary>
+        </member>
+        <member name="T:ExitGames.Client.Photon.Chat.ChatClient">
+             <summary>Central class of the Photon Chat API to connect, handle channels and messages.</summary>
+             <remarks>
+             This class must be instantiated with a IChatClientListener instance to get the callbacks.
+             Integrate it into your game loop by calling Service regularly. If the target platform supports Threads/Tasks,
+             set UseBackgroundWorkerForSending = true, to let the ChatClient keep the connection by sending from
+             an independent thread.
+            
+             Call Connect with an AppId that is setup as Photon Chat application. Note: Connect covers multiple
+             messages between this client and the servers. A short workflow will connect you to a chat server.
+            
+             Each ChatClient resembles a user in chat (set in Connect). Each user automatically subscribes a channel
+             for incoming private messages and can message any other user privately.
+             Before you publish messages in any non-private channel, that channel must be subscribed.
+            
+             PublicChannels is a list of subscribed channels, containing messages and senders.
+             PrivateChannels contains all incoming and sent private messages.
+             </remarks>
+        </member>
+        <member name="P:ExitGames.Client.Photon.Chat.ChatClient.NameServerAddress">
+            <summary>The address of last connected Name Server.</summary>
+        </member>
+        <member name="P:ExitGames.Client.Photon.Chat.ChatClient.FrontendAddress">
+            <summary>The address of the actual chat server assigned from NameServer. Public for read only.</summary>
+        </member>
+        <member name="F:ExitGames.Client.Photon.Chat.ChatClient.chatRegion">
+            <summary>Region used to connect to. Currently all chat is done in EU. It can make sense to use only one region for the whole game.</summary>
+        </member>
+        <member name="P:ExitGames.Client.Photon.Chat.ChatClient.ChatRegion">
+            <summary>Settable only before you connect! Defaults to "EU".</summary>
+        </member>
+        <member name="P:ExitGames.Client.Photon.Chat.ChatClient.State">
+            <summary>Current state of the ChatClient. Also use CanChat.</summary>
+        </member>
+        <member name="P:ExitGames.Client.Photon.Chat.ChatClient.AppVersion">
+            <summary>The version of your client. A new version also creates a new "virtual app" to separate players from older client versions.</summary>
+        </member>
+        <member name="P:ExitGames.Client.Photon.Chat.ChatClient.AppId">
+            <summary>The AppID as assigned from the Photon Cloud. If you host yourself, this is the "regular" Photon Server Application Name (most likely: "LoadBalancing").</summary>
+        </member>
+        <member name="P:ExitGames.Client.Photon.Chat.ChatClient.AuthValues">
+            <summary>Settable only before you connect!</summary>
+        </member>
+        <member name="P:ExitGames.Client.Photon.Chat.ChatClient.UserId">
+            <summary>The unique ID of a user/person, stored in AuthValues.UserId. Set it before you connect.</summary>
+            <remarks>
+            This value wraps AuthValues.UserId.
+            It's not a nickname and we assume users with the same userID are the same person.</remarks>
+        </member>
+        <member name="F:ExitGames.Client.Photon.Chat.ChatClient.MessageLimit">
+             <summary>If greater than 0, new channels will limit the number of messages they cache locally.</summary>
+             <remarks>
+             This can be useful to limit the amount of memory used by chats.
+             You can set a MessageLimit per channel but this value gets applied to new ones.
+            
+             Note:
+             Changing this value, does not affect ChatChannels that are already in use!
+             </remarks>
+        </member>
+        <member name="P:ExitGames.Client.Photon.Chat.ChatClient.UseBackgroundWorkerForSending">
+             <summary>Defines if a background thread will call SendOutgoingCommands, while your code calls Service to dispatch received messages.</summary>
+             <remarks>
+             The benefit of using a background thread to call SendOutgoingCommands is this:
+            
+             Even if your game logic is being paused, the background thread will keep the connection to the server up.
+             On a lower level, acknowledgements and pings will prevent a server-side timeout while (e.g.) Unity loads assets.
+            
+             Your game logic still has to call Service regularly, or else incoming messages are not dispatched.
+             As this typicalls triggers UI updates, it's easier to call Service from the main/UI thread.
+             </remarks>
+        </member>
+        <member name="P:ExitGames.Client.Photon.Chat.ChatClient.TransportProtocol">
+            <summary>Exposes the TransportProtocol of the used PhotonPeer. Settable while not connected.</summary>
+        </member>
+        <member name="P:ExitGames.Client.Photon.Chat.ChatClient.SocketImplementationConfig">
+             <summary>Defines which IPhotonSocket class to use per ConnectionProtocol.</summary>
+             <remarks>
+             Several platforms have special Socket implementations and slightly different APIs.
+             To accomodate this, switching the socket implementation for a network protocol was made available.
+             By default, UDP and TCP have socket implementations assigned.
+            
+             You only need to set the SocketImplementationConfig once, after creating a PhotonPeer
+             and before connecting. If you switch the TransportProtocol, the correct implementation is being used.
+             </remarks>
+        </member>
+        <member name="M:ExitGames.Client.Photon.Chat.ChatClient.Connect(System.String,System.String,ExitGames.Client.Photon.Chat.AuthenticationValues)">
+            <summary>
+            Connects this client to the Photon Chat Cloud service, which will also authenticate the user (and set a UserId).
+            </summary>
+            <param name="appId">Get your Photon Chat AppId from the <a href="https://www.photonengine.com/en/Chat/Dashboard">Dashboard</a>.</param>
+            <param name="appVersion">Any version string you make up. Used to separate users and variants of your clients, which might be incompatible.</param>
+            <param name="authValues">Values for authentication. You can leave this null, if you set a UserId before. If you set authValues, they will override any UserId set before.</param>
+            <returns></returns>
+        </member>
+        <member name="M:ExitGames.Client.Photon.Chat.ChatClient.Service">
+            <summary>
+            Must be called regularly to keep connection between client and server alive and to process incoming messages.
+            </summary>
+            <remarks>
+            This method limits the effort it does automatically using the private variable msDeltaForServiceCalls.
+            That value is lower for connect and multiplied by 4 when chat-server connection is ready.
+            </remarks>
+        </member>
+        <member name="M:ExitGames.Client.Photon.Chat.ChatClient.SendOutgoingInBackground">
+            <summary>
+            Called by a separate thread, this sends outgoing commands of this peer, as long as it's connected.
+            </summary>
+            <returns>True as long as the client is not disconnected.</returns>
+        </member>
+        <member name="M:ExitGames.Client.Photon.Chat.ChatClient.Disconnect">
+            <summary>
+            Disconnects from the Chat Server by sending a "disconnect command", which prevents a timeout server-side.
+            </summary>
+        </member>
+        <member name="M:ExitGames.Client.Photon.Chat.ChatClient.StopThread">
+            <summary>
+            Locally shuts down the connection to the Chat Server. This resets states locally but the server will have to timeout this peer.
+            </summary>
+        </member>
+        <member name="M:ExitGames.Client.Photon.Chat.ChatClient.Subscribe(System.String[])">
+            <summary>Sends operation to subscribe to a list of channels by name.</summary>
+            <param name="channels">List of channels to subscribe to. Avoid null or empty values.</param>
+            <returns>If the operation could be sent at all (Example: Fails if not connected to Chat Server).</returns>
+        </member>
+        <member name="M:ExitGames.Client.Photon.Chat.ChatClient.Subscribe(System.String[],System.Int32)">
+            <summary>
+            Sends operation to subscribe client to channels, optionally fetching a number of messages from the cache.
+            </summary>
+            <remarks>
+            Subscribes channels will forward new messages to this user. Use PublishMessage to do so.
+            The messages cache is limited but can be useful to get into ongoing conversations, if that's needed.
+            </remarks>
+            <param name="channels">List of channels to subscribe to. Avoid null or empty values.</param>
+            <param name="messagesFromHistory">0: no history. 1 and higher: number of messages in history. -1: all available history.</param>
+            <returns>If the operation could be sent at all (Example: Fails if not connected to Chat Server).</returns>
+        </member>
+        <member name="M:ExitGames.Client.Photon.Chat.ChatClient.Unsubscribe(System.String[])">
+             <summary>Unsubscribes from a list of channels, which stops getting messages from those.</summary>
+             <remarks>
+             The client will remove these channels from the PublicChannels dictionary once the server sent a response to this request.
+            
+             The request will be sent to the server and IChatClientListener.OnUnsubscribed gets called when the server
+             actually removed the channel subscriptions.
+            
+             Unsubscribe will fail if you include null or empty channel names.
+             </remarks>
+             <param name="channels">Names of channels to unsubscribe.</param>
+             <returns>False, if not connected to a chat server.</returns>
+        </member>
+        <member name="M:ExitGames.Client.Photon.Chat.ChatClient.PublishMessage(System.String,System.Object,System.Boolean)">
+            <summary>Sends a message to a public channel which this client subscribed to.</summary>
+            <remarks>
+            Before you publish to a channel, you have to subscribe it.
+            Everyone in that channel will get the message.
+            </remarks>
+            <param name="channelName">Name of the channel to publish to.</param>
+            <param name="message">Your message (string or any serializable data).</param>
+            <param name="forwardAsWebhook">Optionally, public messages can be forwarded as webhooks. Configure webhooks for your Chat app to use this.</param>
+            <returns>False if the client is not yet ready to send messages.</returns>
+        </member>
+        <member name="M:ExitGames.Client.Photon.Chat.ChatClient.SendPrivateMessage(System.String,System.Object,System.Boolean)">
+            <summary>
+            Sends a private message to a single target user. Calls OnPrivateMessage on the receiving client.
+            </summary>
+            <param name="target">Username to send this message to.</param>
+            <param name="message">The message you want to send. Can be a simple string or anything serializable.</param>
+            <param name="forwardAsWebhook">Optionally, private messages can be forwarded as webhooks. Configure webhooks for your Chat app to use this.</param>
+            <returns>True if this clients can send the message to the server.</returns>
+        </member>
+        <member name="M:ExitGames.Client.Photon.Chat.ChatClient.SendPrivateMessage(System.String,System.Object,System.Boolean,System.Boolean)">
+            <summary>
+            Sends a private message to a single target user. Calls OnPrivateMessage on the receiving client.
+            </summary>
+            <param name="target">Username to send this message to.</param>
+            <param name="message">The message you want to send. Can be a simple string or anything serializable.</param>
+            <param name="encrypt">Optionally, private messages can be encrypted. Encryption is not end-to-end as the server decrypts the message.</param>
+            <param name="forwardAsWebhook">Optionally, private messages can be forwarded as webhooks. Configure webhooks for your Chat app to use this.</param>
+            <returns>True if this clients can send the message to the server.</returns>
+        </member>
+        <member name="M:ExitGames.Client.Photon.Chat.ChatClient.SetOnlineStatus(System.Int32,System.Object,System.Boolean)">
+             <summary>Sets the user's status (pre-defined or custom) and an optional message.</summary>
+             <remarks>
+             The predefined status values can be found in class ChatUserStatus.
+             State ChatUserStatus.Invisible will make you offline for everyone and send no message.
+            
+             You can set custom values in the status integer. Aside from the pre-configured ones,
+             all states will be considered visible and online. Else, no one would see the custom state.
+            
+             The message object can be anything that Photon can serialize, including (but not limited to)
+             Hashtable, object[] and string. This value is defined by your own conventions.
+             </remarks>
+             <param name="status">Predefined states are in class ChatUserStatus. Other values can be used at will.</param>
+             <param name="message">Optional string message or null.</param>
+             <param name="skipMessage">If true, the message gets ignored. It can be null but won't replace any current message.</param>
+             <returns>True if the operation gets called on the server.</returns>
+        </member>
+        <member name="M:ExitGames.Client.Photon.Chat.ChatClient.SetOnlineStatus(System.Int32)">
+             <summary>Sets the user's status without changing your status-message.</summary>
+             <remarks>
+             The predefined status values can be found in class ChatUserStatus.
+             State ChatUserStatus.Invisible will make you offline for everyone and send no message.
+            
+             You can set custom values in the status integer. Aside from the pre-configured ones,
+             all states will be considered visible and online. Else, no one would see the custom state.
+            
+             This overload does not change the set message.
+             </remarks>
+             <param name="status">Predefined states are in class ChatUserStatus. Other values can be used at will.</param>
+             <returns>True if the operation gets called on the server.</returns>
+        </member>
+        <member name="M:ExitGames.Client.Photon.Chat.ChatClient.SetOnlineStatus(System.Int32,System.Object)">
+             <summary>Sets the user's status without changing your status-message.</summary>
+             <remarks>
+             The predefined status values can be found in class ChatUserStatus.
+             State ChatUserStatus.Invisible will make you offline for everyone and send no message.
+            
+             You can set custom values in the status integer. Aside from the pre-configured ones,
+             all states will be considered visible and online. Else, no one would see the custom state.
+            
+             The message object can be anything that Photon can serialize, including (but not limited to)
+             Hashtable, object[] and string. This value is defined by your own conventions.
+             </remarks>
+             <param name="status">Predefined states are in class ChatUserStatus. Other values can be used at will.</param>
+             <param name="message">Also sets a status-message which your friends can get.</param>
+             <returns>True if the operation gets called on the server.</returns>
+        </member>
+        <member name="M:ExitGames.Client.Photon.Chat.ChatClient.AddFriends(System.String[])">
+             <summary>
+             Adds friends to a list on the Chat Server which will send you status updates for those.
+             </summary>
+             <remarks>
+             AddFriends and RemoveFriends enable clients to handle their friend list
+             in the Photon Chat server. Having users on your friends list gives you access
+             to their current online status (and whatever info your client sets in it).
+            
+             Each user can set an online status consisting of an integer and an arbitratry
+             (serializable) object. The object can be null, Hashtable, object[] or anything
+             else Photon can serialize.
+            
+             The status is published automatically to friends (anyone who set your user ID
+             with AddFriends).
+            
+             Photon flushes friends-list when a chat client disconnects, so it has to be
+             set each time. If your community API gives you access to online status already,
+             you could filter and set online friends in AddFriends.
+            
+             Actual friend relations are not persistent and have to be stored outside
+             of Photon.
+             </remarks>
+             <param name="friends">Array of friend userIds.</param>
+             <returns>If the operation could be sent.</returns>
+        </member>
+        <member name="M:ExitGames.Client.Photon.Chat.ChatClient.RemoveFriends(System.String[])">
+             <summary>
+             Removes the provided entries from the list on the Chat Server and stops their status updates.
+             </summary>
+             <remarks>
+             Photon flushes friends-list when a chat client disconnects. Unless you want to
+             remove individual entries, you don't have to RemoveFriends.
+            
+             AddFriends and RemoveFriends enable clients to handle their friend list
+             in the Photon Chat server. Having users on your friends list gives you access
+             to their current online status (and whatever info your client sets in it).
+            
+             Each user can set an online status consisting of an integer and an arbitratry
+             (serializable) object. The object can be null, Hashtable, object[] or anything
+             else Photon can serialize.
+            
+             The status is published automatically to friends (anyone who set your user ID
+             with AddFriends).
+            
+             Photon flushes friends-list when a chat client disconnects, so it has to be
+             set each time. If your community API gives you access to online status already,
+             you could filter and set online friends in AddFriends.
+            
+             Actual friend relations are not persistent and have to be stored outside
+             of Photon.
+            
+             AddFriends and RemoveFriends enable clients to handle their friend list
+             in the Photon Chat server. Having users on your friends list gives you access
+             to their current online status (and whatever info your client sets in it).
+            
+             Each user can set an online status consisting of an integer and an arbitratry
+             (serializable) object. The object can be null, Hashtable, object[] or anything
+             else Photon can serialize.
+            
+             The status is published automatically to friends (anyone who set your user ID
+             with AddFriends).
+            
+            
+             Actual friend relations are not persistent and have to be stored outside
+             of Photon.
+             </remarks>
+             <param name="friends">Array of friend userIds.</param>
+             <returns>If the operation could be sent.</returns>
+        </member>
+        <member name="M:ExitGames.Client.Photon.Chat.ChatClient.GetPrivateChannelNameByUser(System.String)">
+            <summary>
+            Get you the (locally used) channel name for the chat between this client and another user.
+            </summary>
+            <param name="userName">Remote user's name or UserId.</param>
+            <returns>The (locally used) channel name for a private channel.</returns>
+        </member>
+        <member name="M:ExitGames.Client.Photon.Chat.ChatClient.TryGetChannel(System.String,System.Boolean,ExitGames.Client.Photon.Chat.ChatChannel@)">
+            <summary>
+            Simplified access to either private or public channels by name.
+            </summary>
+            <param name="channelName">Name of the channel to get. For private channels, the channel-name is composed of both user's names.</param>
+            <param name="isPrivate">Define if you expect a private or public channel.</param>
+            <param name="channel">Out parameter gives you the found channel, if any.</param>
+            <returns>True if the channel was found.</returns>
+        </member>
+        <member name="M:ExitGames.Client.Photon.Chat.ChatClient.TryGetChannel(System.String,ExitGames.Client.Photon.Chat.ChatChannel@)">
+            <summary>
+            Simplified access to all channels by name. Checks public channels first, then private ones.
+            </summary>
+            <param name="channelName">Name of the channel to get.</param>
+            <param name="channel">Out parameter gives you the found channel, if any.</param>
+            <returns>True if the channel was found.</returns>
+        </member>
+        <member name="P:ExitGames.Client.Photon.Chat.ChatClient.DebugOut">
+            <summary>
+            Sets the level (and amount) of debug output provided by the library.
+            </summary>
+            <remarks>
+            This affects the callbacks to IChatClientListener.DebugReturn.
+            Default Level: Error.
+            </remarks>
+        </member>
+        <member name="T:ExitGames.Client.Photon.Chat.ChatPeer">
+            <summary>
+            Provides basic operations of the Photon Chat server. This internal class is used by public ChatClient.
+            </summary>
+        </member>
+        <member name="F:ExitGames.Client.Photon.Chat.ChatPeer.NameServerHost">
+            <summary>Name Server Host Name for Photon Cloud. Without port and without any prefix.</summary>
+        </member>
+        <member name="F:ExitGames.Client.Photon.Chat.ChatPeer.NameServerHttp">
+            <summary>Name Server for HTTP connections to the Photon Cloud. Includes prefix and port.</summary>
+        </member>
+        <member name="F:ExitGames.Client.Photon.Chat.ChatPeer.ProtocolToNameServerPort">
+            <summary>Name Server port per protocol (the UDP port is different than TCP, etc).</summary>
+        </member>
+        <member name="P:ExitGames.Client.Photon.Chat.ChatPeer.NameServerAddress">
+            <summary>Name Server Address for Photon Cloud (based on current protocol). You can use the default values and usually won't have to set this value.</summary>
+        </member>
+        <member name="M:ExitGames.Client.Photon.Chat.ChatPeer.GetNameServerAddress">
+            <summary>
+            Gets the NameServer Address (with prefix and port), based on the set protocol (this.UsedProtocol).
+            </summary>
+            <returns>NameServer Address (with prefix and port).</returns>
+        </member>
+        <member name="T:ExitGames.Client.Photon.Chat.CustomAuthenticationType">
+            <summary>
+            Options for optional "Custom Authentication" services used with Photon. Used by OpAuthenticate after connecting to Photon.
+            </summary>
+        </member>
+        <member name="F:ExitGames.Client.Photon.Chat.CustomAuthenticationType.Custom">
+            <summary>Use a custom authentification service. Currently the only implemented option.</summary>
+        </member>
+        <member name="F:ExitGames.Client.Photon.Chat.CustomAuthenticationType.Steam">
+            <summary>Authenticates users by their Steam Account. Set auth values accordingly!</summary>
+        </member>
+        <member name="F:ExitGames.Client.Photon.Chat.CustomAuthenticationType.Facebook">
+            <summary>Authenticates users by their Facebook Account. Set auth values accordingly!</summary>
+        </member>
+        <member name="F:ExitGames.Client.Photon.Chat.CustomAuthenticationType.Oculus">
+            <summary>Authenticates users by their Oculus Account and token.</summary>
+        </member>
+        <member name="F:ExitGames.Client.Photon.Chat.CustomAuthenticationType.PlayStation">
+            <summary>Authenticates users by their PSN Account and token.</summary>
+        </member>
+        <member name="F:ExitGames.Client.Photon.Chat.CustomAuthenticationType.Xbox">
+            <summary>Authenticates users by their Xbox Account and XSTS token.</summary>
+        </member>
+        <member name="F:ExitGames.Client.Photon.Chat.CustomAuthenticationType.None">
+            <summary>Disables custom authentification. Same as not providing any AuthenticationValues for connect (more precisely for: OpAuthenticate).</summary>
+        </member>
+        <member name="T:ExitGames.Client.Photon.Chat.AuthenticationValues">
+             <summary>
+             Container for user authentication in Photon. Set AuthValues before you connect - all else is handled.
+             </summary>
+             <remarks>
+             On Photon, user authentication is optional but can be useful in many cases.
+             If you want to FindFriends, a unique ID per user is very practical.
+            
+             There are basically three options for user authentification: None at all, the client sets some UserId
+             or you can use some account web-service to authenticate a user (and set the UserId server-side).
+            
+             Custom Authentication lets you verify end-users by some kind of login or token. It sends those
+             values to Photon which will verify them before granting access or disconnecting the client.
+            
+             The Photon Cloud Dashboard will let you enable this feature and set important server values for it.
+             https://www.photonengine.com/dashboard
+             </remarks>
+        </member>
+        <member name="F:ExitGames.Client.Photon.Chat.AuthenticationValues.authType">
+            <summary>See AuthType.</summary>
+        </member>
+        <member name="P:ExitGames.Client.Photon.Chat.AuthenticationValues.AuthType">
+            <summary>The type of custom authentication provider that should be used. Currently only "Custom" or "None" (turns this off).</summary>
+        </member>
+        <member name="P:ExitGames.Client.Photon.Chat.AuthenticationValues.AuthGetParameters">
+            <summary>This string must contain any (http get) parameters expected by the used authentication service. By default, username and token.</summary>
+            <remarks>Standard http get parameters are used here and passed on to the service that's defined in the server (Photon Cloud Dashboard).</remarks>
+        </member>
+        <member name="P:ExitGames.Client.Photon.Chat.AuthenticationValues.AuthPostData">
+            <summary>Data to be passed-on to the auth service via POST. Default: null (not sent). Either string or byte[] (see setters).</summary>
+        </member>
+        <member name="P:ExitGames.Client.Photon.Chat.AuthenticationValues.Token">
+            <summary>After initial authentication, Photon provides a token for this client / user, which is subsequently used as (cached) validation.</summary>
+        </member>
+        <member name="P:ExitGames.Client.Photon.Chat.AuthenticationValues.UserId">
+            <summary>The UserId should be a unique identifier per user. This is for finding friends, etc..</summary>
+        </member>
+        <member name="M:ExitGames.Client.Photon.Chat.AuthenticationValues.#ctor">
+            <summary>Creates empty auth values without any info.</summary>
+        </member>
+        <member name="M:ExitGames.Client.Photon.Chat.AuthenticationValues.#ctor(System.String)">
+            <summary>Creates minimal info about the user. If this is authenticated or not, depends on the set AuthType.</summary>
+            <param name="userId">Some UserId to set in Photon.</param>
+        </member>
+        <member name="M:ExitGames.Client.Photon.Chat.AuthenticationValues.SetAuthPostData(System.String)">
+            <summary>Sets the data to be passed-on to the auth service via POST.</summary>
+            <param name="stringData">String data to be used in the body of the POST request. Null or empty string will set AuthPostData to null.</param>
+        </member>
+        <member name="M:ExitGames.Client.Photon.Chat.AuthenticationValues.SetAuthPostData(System.Byte[])">
+            <summary>Sets the data to be passed-on to the auth service via POST.</summary>
+            <param name="byteData">Binary token / auth-data to pass on.</param>
+        </member>
+        <member name="M:ExitGames.Client.Photon.Chat.AuthenticationValues.AddAuthParameter(System.String,System.String)">
+            <summary>Adds a key-value pair to the get-parameters used for Custom Auth.</summary>
+            <remarks>This method does uri-encoding for you.</remarks>
+            <param name="key">Key for the value to set.</param>
+            <param name="value">Some value relevant for Custom Authentication.</param>
+        </member>
+        <member name="F:ExitGames.Client.Photon.Chat.ParameterCode.Secret">
+            <summary>(221) Internally used to establish encryption</summary>
+        </member>
+        <member name="F:ExitGames.Client.Photon.Chat.ParameterCode.ClientAuthenticationType">
+            <summary>(217) This key's (byte) value defines the target custom authentication type/service the client connects with. Used in OpAuthenticate</summary>
+        </member>
+        <member name="F:ExitGames.Client.Photon.Chat.ParameterCode.ClientAuthenticationParams">
+            <summary>(216) This key's (string) value provides parameters sent to the custom authentication type/service the client connects with. Used in OpAuthenticate</summary>
+        </member>
+        <member name="F:ExitGames.Client.Photon.Chat.ParameterCode.ClientAuthenticationData">
+            <summary>(214) This key's (string or byte[]) value provides parameters sent to the custom authentication service setup in Photon Dashboard. Used in OpAuthenticate</summary>
+        </member>
+        <member name="F:ExitGames.Client.Photon.Chat.ParameterCode.Region">
+            <summary>(210) Used for region values in OpAuth and OpGetRegions.</summary>
+        </member>
+        <member name="F:ExitGames.Client.Photon.Chat.ParameterCode.Address">
+            <summary>(230) Address of a (game) server to use.</summary>
+        </member>
+        <member name="F:ExitGames.Client.Photon.Chat.ParameterCode.UserId">
+            <summary>(225) User's ID</summary>
+        </member>
+        <member name="T:ExitGames.Client.Photon.Chat.ErrorCode">
+            <summary>
+            ErrorCode defines the default codes associated with Photon client/server communication.
+            </summary>
+        </member>
+        <member name="F:ExitGames.Client.Photon.Chat.ErrorCode.Ok">
+            <summary>(0) is always "OK", anything else an error or specific situation.</summary>
+        </member>
+        <member name="F:ExitGames.Client.Photon.Chat.ErrorCode.OperationNotAllowedInCurrentState">
+            <summary>
+            (-3) Operation can't be executed yet (e.g. OpJoin can't be called before being authenticated, RaiseEvent cant be used before getting into a room).
+            </summary>
+            <remarks>
+            Before you call any operations on the Cloud servers, the automated client workflow must complete its authorization.
+            In PUN, wait until State is: JoinedLobby (with AutoJoinLobby = true) or ConnectedToMaster (AutoJoinLobby = false)
+            </remarks>
+        </member>
+        <member name="F:ExitGames.Client.Photon.Chat.ErrorCode.InvalidOperationCode">
+            <summary>(-2) The operation you called is not implemented on the server (application) you connect to. Make sure you run the fitting applications.</summary>
+        </member>
+        <member name="F:ExitGames.Client.Photon.Chat.ErrorCode.InternalServerError">
+            <summary>(-1) Something went wrong in the server. Try to reproduce and contact Exit Games.</summary>
+        </member>
+        <member name="F:ExitGames.Client.Photon.Chat.ErrorCode.InvalidAuthentication">
+            <summary>(32767) Authentication failed. Possible cause: AppId is unknown to Photon (in cloud service).</summary>
+        </member>
+        <member name="F:ExitGames.Client.Photon.Chat.ErrorCode.GameIdAlreadyExists">
+            <summary>(32766) GameId (name) already in use (can't create another). Change name.</summary>
+        </member>
+        <member name="F:ExitGames.Client.Photon.Chat.ErrorCode.GameFull">
+            <summary>(32765) Game is full. This rarely happens when some player joined the room before your join completed.</summary>
+        </member>
+        <member name="F:ExitGames.Client.Photon.Chat.ErrorCode.GameClosed">
+            <summary>(32764) Game is closed and can't be joined. Join another game.</summary>
+        </member>
+        <member name="F:ExitGames.Client.Photon.Chat.ErrorCode.ServerFull">
+            <summary>(32762) Not in use currently.</summary>
+        </member>
+        <member name="F:ExitGames.Client.Photon.Chat.ErrorCode.UserBlocked">
+            <summary>(32761) Not in use currently.</summary>
+        </member>
+        <member name="F:ExitGames.Client.Photon.Chat.ErrorCode.NoRandomMatchFound">
+            <summary>(32760) Random matchmaking only succeeds if a room exists thats neither closed nor full. Repeat in a few seconds or create a new room.</summary>
+        </member>
+        <member name="F:ExitGames.Client.Photon.Chat.ErrorCode.GameDoesNotExist">
+            <summary>(32758) Join can fail if the room (name) is not existing (anymore). This can happen when players leave while you join.</summary>
+        </member>
+        <member name="F:ExitGames.Client.Photon.Chat.ErrorCode.MaxCcuReached">
+             <summary>(32757) Authorization on the Photon Cloud failed becaus the concurrent users (CCU) limit of the app's subscription is reached.</summary>
+             <remarks>
+             Unless you have a plan with "CCU Burst", clients might fail the authentication step during connect.
+             Affected client are unable to call operations. Please note that players who end a game and return
+             to the master server will disconnect and re-connect, which means that they just played and are rejected
+             in the next minute / re-connect.
+             This is a temporary measure. Once the CCU is below the limit, players will be able to connect an play again.
+            
+             OpAuthorize is part of connection workflow but only on the Photon Cloud, this error can happen.
+             Self-hosted Photon servers with a CCU limited license won't let a client connect at all.
+             </remarks>
+        </member>
+        <member name="F:ExitGames.Client.Photon.Chat.ErrorCode.InvalidRegion">
+             <summary>(32756) Authorization on the Photon Cloud failed because the app's subscription does not allow to use a particular region's server.</summary>
+             <remarks>
+             Some subscription plans for the Photon Cloud are region-bound. Servers of other regions can't be used then.
+             Check your master server address and compare it with your Photon Cloud Dashboard's info.
+             https://cloud.photonengine.com/dashboard
+            
+             OpAuthorize is part of connection workflow but only on the Photon Cloud, this error can happen.
+             Self-hosted Photon servers with a CCU limited license won't let a client connect at all.
+             </remarks>
+        </member>
+        <member name="F:ExitGames.Client.Photon.Chat.ErrorCode.CustomAuthenticationFailed">
+            <summary>
+            (32755) Custom Authentication of the user failed due to setup reasons (see Cloud Dashboard) or the provided user data (like username or token). Check error message for details.
+            </summary>
+        </member>
+        <member name="T:ExitGames.Client.Photon.Chat.ChatUserStatus">
+             <summary>Contains commonly used status values for SetOnlineStatus. You can define your own.</summary>
+             <remarks>
+             While "online" (value 2 and up), the status message will be sent to anyone who has you on his friend list.
+            
+             Define custom online status values as you like with these rules:
+             0: Means "offline". It will be used when you are not connected. In this status, there is no status message.
+             1: Means "invisible" and is sent to friends as "offline". They see status 0, no message but you can chat.
+             2: And any higher value will be treated as "online". Status can be set.
+             </remarks>
+        </member>
+        <member name="F:ExitGames.Client.Photon.Chat.ChatUserStatus.Offline">
+            <summary>(0) Offline.</summary>
+        </member>
+        <member name="F:ExitGames.Client.Photon.Chat.ChatUserStatus.Invisible">
+            <summary>(1) Be invisible to everyone. Sends no message.</summary>
+        </member>
+        <member name="F:ExitGames.Client.Photon.Chat.ChatUserStatus.Online">
+            <summary>(2) Online and available.</summary>
+        </member>
+        <member name="F:ExitGames.Client.Photon.Chat.ChatUserStatus.Away">
+            <summary>(3) Online but not available.</summary>
+        </member>
+        <member name="F:ExitGames.Client.Photon.Chat.ChatUserStatus.DND">
+            <summary>(4) Do not disturb.</summary>
+        </member>
+        <member name="F:ExitGames.Client.Photon.Chat.ChatUserStatus.LFG">
+            <summary>(5) Looking For Game/Group. Could be used when you want to be invited or do matchmaking.</summary>
+        </member>
+        <member name="F:ExitGames.Client.Photon.Chat.ChatUserStatus.Playing">
+            <summary>(6) Could be used when in a room, playing.</summary>
+        </member>
+        <member name="T:ExitGames.Client.Photon.Chat.ChatChannel">
+            <summary>
+            A channel of communication in Photon Chat, updated by ChatClient and provided as READ ONLY.
+            </summary>
+            <remarks>
+            Contains messages and senders to use (read!) and display by your GUI.
+            Access these by:
+                ChatClient.PublicChannels
+                ChatClient.PrivateChannels
+            </remarks>
+        </member>
+        <member name="F:ExitGames.Client.Photon.Chat.ChatChannel.Name">
+            <summary>Name of the channel (used to subscribe and unsubscribe).</summary>
+        </member>
+        <member name="F:ExitGames.Client.Photon.Chat.ChatChannel.Senders">
+            <summary>Senders of messages in chronoligical order. Senders and Messages refer to each other by index. Senders[x] is the sender of Messages[x].</summary>
+        </member>
+        <member name="F:ExitGames.Client.Photon.Chat.ChatChannel.Messages">
+            <summary>Messages in chronoligical order. Senders and Messages refer to each other by index. Senders[x] is the sender of Messages[x].</summary>
+        </member>
+        <member name="F:ExitGames.Client.Photon.Chat.ChatChannel.MessageLimit">
+            <summary>If greater than 0, this channel will limit the number of messages, that it caches locally.</summary>
+        </member>
+        <member name="P:ExitGames.Client.Photon.Chat.ChatChannel.IsPrivate">
+            <summary>Is this a private 1:1 channel?</summary>
+        </member>
+        <member name="P:ExitGames.Client.Photon.Chat.ChatChannel.MessageCount">
+            <summary>Count of messages this client still buffers/knows for this channel.</summary>
+        </member>
+        <member name="M:ExitGames.Client.Photon.Chat.ChatChannel.#ctor(System.String)">
+            <summary>Used internally to create new channels. This does NOT create a channel on the server! Use ChatClient.Subscribe.</summary>
+        </member>
+        <member name="M:ExitGames.Client.Photon.Chat.ChatChannel.Add(System.String,System.Object)">
+            <summary>Used internally to add messages to this channel.</summary>
+        </member>
+        <member name="M:ExitGames.Client.Photon.Chat.ChatChannel.Add(System.String[],System.Object[])">
+            <summary>Used internally to add messages to this channel.</summary>
+        </member>
+        <member name="M:ExitGames.Client.Photon.Chat.ChatChannel.TruncateMessages">
+            <summary>Reduces the number of locally cached messages in this channel to the MessageLimit (if set).</summary>
+        </member>
+        <member name="M:ExitGames.Client.Photon.Chat.ChatChannel.ClearMessages">
+            <summary>Clear the local cache of messages currently stored. This frees memory but doesn't affect the server.</summary>
+        </member>
+        <member name="M:ExitGames.Client.Photon.Chat.ChatChannel.ToStringMessages">
+            <summary>Provides a string-representation of all messages in this channel.</summary>
+            <returns>All known messages in format "Sender: Message", line by line.</returns>
+        </member>
+        <member name="T:ExitGames.Client.Photon.Chat.ChatDisconnectCause">
+            <summary>Enumaration of causes for Disconnects (used in LoadBalancingClient.DisconnectedCause).</summary>
+            <remarks>Read the individual descriptions to find out what to do about this type of disconnect.</remarks>
+        </member>
+        <member name="F:ExitGames.Client.Photon.Chat.ChatDisconnectCause.None">
+            <summary>No error was tracked.</summary>
+        </member>
+        <member name="F:ExitGames.Client.Photon.Chat.ChatDisconnectCause.DisconnectByServerUserLimit">
+            <summary>OnStatusChanged: The CCUs count of your Photon Server License is exausted (temporarily).</summary>
+        </member>
+        <member name="F:ExitGames.Client.Photon.Chat.ChatDisconnectCause.ExceptionOnConnect">
+            <summary>OnStatusChanged: The server is not available or the address is wrong. Make sure the port is provided and the server is up.</summary>
+        </member>
+        <member name="F:ExitGames.Client.Photon.Chat.ChatDisconnectCause.DisconnectByServer">
+            <summary>OnStatusChanged: The server disconnected this client. Most likely the server's send buffer is full (receiving too much from other clients).</summary>
+        </member>
+        <member name="F:ExitGames.Client.Photon.Chat.ChatDisconnectCause.TimeoutDisconnect">
+            <summary>OnStatusChanged: This client detected that the server's responses are not received in due time. Maybe you send / receive too much?</summary>
+        </member>
+        <member name="F:ExitGames.Client.Photon.Chat.ChatDisconnectCause.Exception">
+            <summary>OnStatusChanged: Some internal exception caused the socket code to fail. Contact Exit Games.</summary>
+        </member>
+        <member name="F:ExitGames.Client.Photon.Chat.ChatDisconnectCause.InvalidAuthentication">
+            <summary>OnOperationResponse: Authenticate in the Photon Cloud with invalid AppId. Update your subscription or contact Exit Games.</summary>
+        </member>
+        <member name="F:ExitGames.Client.Photon.Chat.ChatDisconnectCause.MaxCcuReached">
+            <summary>OnOperationResponse: Authenticate (temporarily) failed when using a Photon Cloud subscription without CCU Burst. Update your subscription.</summary>
+        </member>
+        <member name="F:ExitGames.Client.Photon.Chat.ChatDisconnectCause.InvalidRegion">
+            <summary>OnOperationResponse: Authenticate when the app's Photon Cloud subscription is locked to some (other) region(s). Update your subscription or master server address.</summary>
+        </member>
+        <member name="F:ExitGames.Client.Photon.Chat.ChatDisconnectCause.OperationNotAllowedInCurrentState">
+            <summary>OnOperationResponse: Operation that's (currently) not available for this client (not authorized usually). Only tracked for op Authenticate.</summary>
+        </member>
+        <member name="F:ExitGames.Client.Photon.Chat.ChatDisconnectCause.CustomAuthenticationFailed">
+            <summary>OnOperationResponse: Authenticate in the Photon Cloud with invalid client values or custom authentication setup in Cloud Dashboard.</summary>
+        </member>
+        <member name="T:ExitGames.Client.Photon.Chat.IChatClientListener">
+            <summary>
+            Callback interface for Chat client side. Contains callback methods to notify your app about updates.
+            Must be provided to new ChatClient in constructor
+            </summary>
+        </member>
+        <member name="M:ExitGames.Client.Photon.Chat.IChatClientListener.DebugReturn(ExitGames.Client.Photon.DebugLevel,System.String)">
+            <summary>
+            All debug output of the library will be reported through this method. Print it or put it in a
+            buffer to use it on-screen.
+            </summary>
+            <param name="level">DebugLevel (severity) of the message.</param>
+            <param name="message">Debug text. Print to System.Console or screen.</param>
+        </member>
+        <member name="M:ExitGames.Client.Photon.Chat.IChatClientListener.OnDisconnected">
+            <summary>
+            Disconnection happened.
+            </summary>
+        </member>
+        <member name="M:ExitGames.Client.Photon.Chat.IChatClientListener.OnConnected">
+            <summary>
+            Client is connected now.
+            </summary>
+            <remarks>
+            Clients have to be connected before they can send their state, subscribe to channels and send any messages.
+            </remarks>
+        </member>
+        <member name="M:ExitGames.Client.Photon.Chat.IChatClientListener.OnChatStateChange(ExitGames.Client.Photon.Chat.ChatState)">
+            <summary>The ChatClient's state changed. Usually, OnConnected and OnDisconnected are the callbacks to react to.</summary>
+            <param name="state">The new state.</param>
+        </member>
+        <member name="M:ExitGames.Client.Photon.Chat.IChatClientListener.OnGetMessages(System.String,System.String[],System.Object[])">
+            <summary>
+            Notifies app that client got new messages from server
+            Number of senders is equal to number of messages in 'messages'. Sender with number '0' corresponds to message with
+            number '0', sender with number '1' corresponds to message with number '1' and so on
+            </summary>
+            <param name="channelName">channel from where messages came</param>
+            <param name="senders">list of users who sent messages</param>
+            <param name="messages">list of messages it self</param>
+        </member>
+        <member name="M:ExitGames.Client.Photon.Chat.IChatClientListener.OnPrivateMessage(System.String,System.Object,System.String)">
+            <summary>
+            Notifies client about private message
+            </summary>
+            <param name="sender">user who sent this message</param>
+            <param name="message">message it self</param>
+            <param name="channelName">channelName for private messages (messages you sent yourself get added to a channel per target username)</param>
+        </member>
+        <member name="M:ExitGames.Client.Photon.Chat.IChatClientListener.OnSubscribed(System.String[],System.Boolean[])">
+            <summary>
+            Result of Subscribe operation. Returns subscription result for every requested channel name.
+            </summary>
+            <remarks>
+            If multiple channels sent in Subscribe operation, OnSubscribed may be called several times, each call with part of sent array or with single channel in "channels" parameter. 
+            Calls order and order of channels in "channels" parameter may differ from order of channels in "channels" parameter of Subscribe operation.
+            </remarks>
+            <param name="channels">Array of channel names.</param>
+            <param name="results">Per channel result if subscribed.</param>
+        </member>
+        <member name="M:ExitGames.Client.Photon.Chat.IChatClientListener.OnUnsubscribed(System.String[])">
+            <summary>
+            Result of Unsubscribe operation. Returns for channel name if the channel is now unsubscribed.
+            </summary>
+            If multiple channels sent in Unsubscribe operation, OnUnsubscribed may be called several times, each call with part of sent array or with single channel in "channels" parameter. 
+            Calls order and order of channels in "channels" parameter may differ from order of channels in "channels" parameter of Unsubscribe operation.
+            <param name="channels">Array of channel names that are no longer subscribed.</param>
+        </member>
+        <member name="M:ExitGames.Client.Photon.Chat.IChatClientListener.OnStatusUpdate(System.String,System.Int32,System.Boolean,System.Object)">
+            <summary>
+            New status of another user (you get updates for users set in your friends list).
+            </summary>
+            <param name="user">Name of the user.</param>
+            <param name="status">New status of that user.</param>
+            <param name="gotMessage">True if the status contains a message you should cache locally. False: This status update does not include a message (keep any you have).</param>
+            <param name="message">Message that user set.</param>
+        </member>
+    </members>
+</doc>
