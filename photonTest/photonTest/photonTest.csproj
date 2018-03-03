@@ -79,17 +79,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="EasyPhoton.cs" />
-    <Compile Include="Extensions.cs" />
-    <Compile Include="FriendInfo.cs" />
-    <Compile Include="LoadBalancingClient.cs" />
-    <Compile Include="LoadBalancingPeer.cs" />
-    <Compile Include="Player.cs" />
+    <Compile Include="Photon\Extensions.cs" />
+    <Compile Include="Photon\FriendInfo.cs" />
+    <Compile Include="Photon\LoadBalancingClient.cs" />
+    <Compile Include="Photon\LoadBalancingPeer.cs" />
+    <Compile Include="Photon\Player.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Room.cs" />
-    <Compile Include="RoomInfo.cs" />
+    <Compile Include="Photon\Room.cs" />
+    <Compile Include="Photon\RoomInfo.cs" />
     <Compile Include="SimpleSerialize.cs" />
-    <Compile Include="WebRpc.cs" />
+    <Compile Include="Photon\WebRpc.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
