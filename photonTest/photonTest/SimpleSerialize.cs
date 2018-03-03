@@ -49,6 +49,8 @@ namespace SimpleSerialize
 		uint ReadFrom( byte[] bytes, uint offset );
 	}
 
+
+
 	[StructLayout( LayoutKind.Explicit )]
 	public struct FloatSerializer : ISimpleSerializer 
 	{
