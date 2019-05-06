@@ -14,6 +14,9 @@ using Reactive.Bindings.Extensions;
 
 namespace EasyPhoton
 {
+	/// <summary>
+	/// https://doc-api.photonengine.com/en/dotnet/current/
+	/// </summary>
 	public class PhotonManager
 	{
 		
@@ -86,15 +89,15 @@ namespace EasyPhoton
 		{
 			var responseStream = Observable
 				.FromEvent<OperationResponse>( h => this.cl.OnOpResponseAction += h, h => this.cl.OnOpResponseAction -= h );
-
+			
 			responseStream
 				.Where( op => op.ReturnCode != 0 )
 				.Subscribe( op => Console.WriteLine( $"err : {op}" ) )
 				.AddTo( this.compositeDisposer );
 			
 			responseStream
-				.Where( op => op.OperationCode == 1 )
-				.Subscribe( op => Console.WriteLine( $"response {op.Parameters[0]}" ) )
+				.Where( op => op.OperationCode == 10 )
+				.Subscribe( op => Console.WriteLine( $"response {op.Parameters.Count()}" ) )
 				.AddTo( this.compositeDisposer );
 
 		}
@@ -104,7 +107,7 @@ namespace EasyPhoton
 			var datas = new Dictionary<byte,object>();
 			datas.Add( 0, 1 );
 			
-			this.cl.loadBalancingPeer.OpCustom( 1, datas, true );
+			this.cl.loadBalancingPeer.OpCustom( customOpCode:10, customOpParameters:datas, sendReliable:true );
 		}
 
 		public void Close()

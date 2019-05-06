@@ -60,14 +60,16 @@ namespace photonTest
 			//	Console.WriteLine( $"end {i}" );
 			}
 		}
-		static async void abc()
+		static async Task abc()
 		{
 			var ep = new EasyPhoton.PhotonManager();
 			ep.Start();
 			await ep.JoinAsync();
+			ep.StartReciving();
+			ep.SendTest();
+			await Observable.Interval( TimeSpan.FromSeconds(2) ).FirstAsync();
 			ep.Close();
 			ep.End();
-			Console.ReadKey();
 		}
 		void sef()
 		{
