@@ -30,14 +30,16 @@ namespace photonTest
 		}
 		static void Main( string[] args )
 		{
-			Console.WriteLine( $"{Thread.CurrentThread.ManagedThreadId} s");
-			testa();
-			Console.WriteLine( $"{Thread.CurrentThread.ManagedThreadId} e" );
-			Console.ReadKey();
-			return;
+			//Console.WriteLine( $"{Thread.CurrentThread.ManagedThreadId} s");
+			//testa();
+			//Console.WriteLine( $"{Thread.CurrentThread.ManagedThreadId} e" );
+			//Console.ReadKey();
+			//return;
 			try
 			{
-			abc(); }catch( Exception e ){ Console.WriteLine(e.Message);}
+				abc(); 
+			}
+			catch( Exception e ){ Console.WriteLine(e.Message);}
 			Console.ReadKey();
 		}
 		void repsub()
@@ -63,6 +65,9 @@ namespace photonTest
 			var ep = new EasyPhoton.PhotonManager();
 			ep.Start();
 			await ep.JoinAsync();
+			ep.Close();
+			ep.End();
+			Console.ReadKey();
 		}
 		void sef()
 		{
