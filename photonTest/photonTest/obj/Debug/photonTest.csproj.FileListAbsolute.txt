@@ -90,3 +90,5 @@ C:\Users\abarabone\Desktop\projects\abarabone\PhotonPractice\photonTest\photonTe
 C:\Users\abarabone\Desktop\projects\abarabone\PhotonPractice\photonTest\photonTest\obj\Debug\photonTest.pdb
 C:\Users\abarabone\Desktop\vsgithub\abarabone\PhotonPractice\photonTest\photonTest\bin\Debug\ZeroFormatter.dll
 C:\Users\abarabone\Desktop\vsgithub\abarabone\PhotonPractice\photonTest\photonTest\bin\Debug\ZeroFormatter.Interfaces.dll
+C:\Users\abarabone\Desktop\projects\abarabone\PhotonPractice\photonTest\photonTest\bin\Debug\ZeroFormatter.dll
+C:\Users\abarabone\Desktop\projects\abarabone\PhotonPractice\photonTest\photonTest\bin\Debug\ZeroFormatter.Interfaces.dll

@@ -80,33 +80,43 @@ namespace EasyPhoton
 				.FirstAsync();
 
 
-			//StartReciving();
-			//SendTest();
-			
+			StartReciving();
+			SendTest();
+
 		}
 
 		public void StartReciving()
 		{
 			var responseStream = Observable
 				.FromEvent<OperationResponse>( h => this.cl.OnOpResponseAction += h, h => this.cl.OnOpResponseAction -= h );
-			
-			//responseStream
-			//	.Where( op => op.ReturnCode != 0 )
-			//	.Subscribe( op => Console.WriteLine( $"err : {op}" ) )
-			//	.AddTo( this.compositeDisposer );
-			
+
 			responseStream
-				.Where( op => op.OperationCode == 111 )
-				.Subscribe( op => Console.WriteLine( $"response {op.Parameters.Count()}" ) )
+				.Where( op => op.ReturnCode != 0 )
+				.Subscribe( op => Console.WriteLine( $"err : {op}" ) )
+				.AddTo( this.compositeDisposer );
+
+			responseStream
+				//.Where( op => op.OperationCode == OperationCode.RaiseEvent )
+				.Subscribe( op => Console.WriteLine( $"response {op.OperationCode} {op.Parameters.Count}" ) )
+				.AddTo( this.compositeDisposer );
+
+
+			var eventStream = Observable
+				.FromEvent<EventData>( h => this.cl.OnEventAction += h, h => this.cl.OnEventAction -= h );
+
+			eventStream
+				.Subscribe( ev => Console.WriteLine( $"event {ev.Code} {ev.Parameters.Count}" ) )
 				.AddTo( this.compositeDisposer );
 		}
 
 		public void SendTest()
 		{
 			var datas = new Dictionary<byte,object>();
-			datas.Add( 0, new byte[1] );
-			
-			this.cl.loadBalancingPeer.OpCustom( customOpCode:111, customOpParameters:datas, sendReliable:true );
+			datas.Add( 0, new byte[ 1 ] );
+
+			this.cl.OpRaiseEvent( 0, 112, true, RaiseEventOptions.Default );
+			this.cl.loadBalancingPeer.OpRaiseEvent( 0, 113, true, RaiseEventOptions.Default );
+			//this.cl.loadBalancingPeer.OpCustom( customOpCode: OperationCode.RaiseEvent, customOpParameters: datas, sendReliable: false );
 		}
 
 		public void Close()

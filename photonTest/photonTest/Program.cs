@@ -66,9 +66,9 @@ namespace photonTest
 			var ep = new EasyPhoton.PhotonManager();
 			ep.Start();
 			await ep.JoinAsync();
-			ep.StartReciving();
-			ep.SendTest();
-			await Observable.Interval( TimeSpan.FromSeconds(2) ).FirstAsync();
+			//ep.StartReciving();
+			//ep.SendTest();
+			await Observable.Interval( TimeSpan.FromSeconds(5) ).FirstAsync();
 			ep.Close();
 			ep.End();
 		}
