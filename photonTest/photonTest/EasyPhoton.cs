@@ -90,24 +90,23 @@ namespace EasyPhoton
 			var responseStream = Observable
 				.FromEvent<OperationResponse>( h => this.cl.OnOpResponseAction += h, h => this.cl.OnOpResponseAction -= h );
 			
-			responseStream
-				.Where( op => op.ReturnCode != 0 )
-				.Subscribe( op => Console.WriteLine( $"err : {op}" ) )
-				.AddTo( this.compositeDisposer );
+			//responseStream
+			//	.Where( op => op.ReturnCode != 0 )
+			//	.Subscribe( op => Console.WriteLine( $"err : {op}" ) )
+			//	.AddTo( this.compositeDisposer );
 			
 			responseStream
-				.Where( op => op.OperationCode == 10 )
+				.Where( op => op.OperationCode == 111 )
 				.Subscribe( op => Console.WriteLine( $"response {op.Parameters.Count()}" ) )
 				.AddTo( this.compositeDisposer );
-
 		}
 
 		public void SendTest()
 		{
 			var datas = new Dictionary<byte,object>();
-			datas.Add( 0, 1 );
+			datas.Add( 0, new byte[1] );
 			
-			this.cl.loadBalancingPeer.OpCustom( customOpCode:10, customOpParameters:datas, sendReliable:true );
+			this.cl.loadBalancingPeer.OpCustom( customOpCode:111, customOpParameters:datas, sendReliable:true );
 		}
 
 		public void Close()

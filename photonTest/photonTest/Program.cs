@@ -37,7 +37,8 @@ namespace photonTest
 			//return;
 			try
 			{
-				abc(); 
+				//SerializeerPract.Seri();
+				abc();
 			}
 			catch( Exception e ){ Console.WriteLine(e.Message);}
 			Console.ReadKey();
