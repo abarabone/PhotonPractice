@@ -11,6 +11,7 @@ using System.Reactive;
 using System.Reactive.Disposables;
 using Reactive;
 using Reactive.Bindings.Extensions;
+using ZeroFormatter;
 
 namespace EasyPhoton
 {
@@ -42,9 +43,9 @@ namespace EasyPhoton
 		public void End()
 		{
 			
+			Console.WriteLine( "end" );
 			this.compositeDisposer.Dispose();
 			
-			Console.WriteLine( "end" );
 			//Console.ReadKey();
 			//await obse
 		}
@@ -82,7 +83,16 @@ namespace EasyPhoton
 
 			StartReciving();
 			SendTest();
-
+			
+			await Observable.Interval( TimeSpan.FromSeconds(5) ).FirstAsync();
+			
+			this.cl.OpLeaveRoom();
+			await clientStateStream
+				.Where( cs => cs == ClientState.JoinedLobby )
+				.FirstAsync();
+			this.cl.OpLeaveLobby();
+			
+			await Observable.Interval( TimeSpan.FromSeconds(3) ).FirstAsync();
 		}
 
 		public void StartReciving()
@@ -111,19 +121,29 @@ namespace EasyPhoton
 
 		public void SendTest()
 		{
-			var datas = new Dictionary<byte,object>();
-			datas.Add( 0, new byte[ 1 ] );
+			var bs = new byte[1024];
+			ZeroFormatterSerializer.Serialize( ref bs, 0, 11 );
+			ZeroFormatterSerializer.Serialize( ref bs, 4, 11 );
 
-			this.cl.OpRaiseEvent( 0, 112, true, RaiseEventOptions.Default );
-			this.cl.loadBalancingPeer.OpRaiseEvent( 0, 113, true, RaiseEventOptions.Default );
-			//this.cl.loadBalancingPeer.OpCustom( customOpCode: OperationCode.RaiseEvent, customOpParameters: datas, sendReliable: false );
+			var datas = new Dictionary<byte,object>();
+			datas[ ParameterCode.Data ] = bs;
+			datas[ParameterCode.ReceiverGroup] = ReceiverGroup.All;
+
+			//this.cl.OpRaiseEvent( 0, 112, true, new RaiseEventOptions{Receivers = ReceiverGroup.All } );
+			//this.cl.loadBalancingPeer.OpRaiseEvent( 0, 113, true, RaiseEventOptions.Default );
+			datas[ ParameterCode.Code ] = (byte)0;
+			this.cl.loadBalancingPeer.OpCustom( customOpCode: OperationCode.RaiseEvent, customOpParameters: datas, sendReliable: false );
+			datas[ ParameterCode.Code ] = (byte)1;
+			this.cl.loadBalancingPeer.OpCustom( customOpCode: OperationCode.RaiseEvent, customOpParameters: datas, sendReliable: false );
+			datas[ ParameterCode.Code ] = (byte)2;
+			this.cl.loadBalancingPeer.OpCustom( customOpCode: OperationCode.RaiseEvent, customOpParameters: datas, sendReliable: false );
 		}
 
 		public void Close()
 		{
+			Console.WriteLine( "discon" );
 			this.cl.Disconnect();
 
-			Console.WriteLine( "discon" );
 
 			//Console.ReadKey();
 		}

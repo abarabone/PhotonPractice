@@ -68,7 +68,6 @@ namespace photonTest
 			await ep.JoinAsync();
 			//ep.StartReciving();
 			//ep.SendTest();
-			await Observable.Interval( TimeSpan.FromSeconds(5) ).FirstAsync();
 			ep.Close();
 			ep.End();
 		}
